@@ -75,7 +75,7 @@ jobs:
           targets: wasm32-unknown-unknown
 
       - name: Download binaryen
-        if: github.repository == 'LiveSplit/LiveSplitOne' && github.ref == 'refs/heads/master'
+        if: github.repository == 'Gamebuster19901/LiveSplitOne' && github.ref == 'refs/heads/master'
         uses: robinraju/release-downloader@v1.10
         with:
           repository: "WebAssembly/binaryen"
@@ -84,7 +84,7 @@ jobs:
           out-file-path: ${{ matrix.cargo_bin }}
 
       - name: Install binaryen
-        if: github.repository == 'LiveSplit/LiveSplitOne' && github.ref == 'refs/heads/master'
+        if: github.repository == 'Gamebuster19901/LiveSplitOne' && github.ref == 'refs/heads/master'
         shell: bash
         run: |
           cd ${{ matrix.cargo_bin }}/..
@@ -175,7 +175,7 @@ jobs:
           path: test/screenshots
 
       - name: Optimize
-        if: github.repository == 'LiveSplit/LiveSplitOne' && github.ref == 'refs/heads/master'
+        if: github.repository == 'Gamebuster19901/LiveSplitOne' && github.ref == 'refs/heads/master'
         shell: bash
         run: |
           WASM_FILE=$(ls ${{ matrix.dist_path }}/*.wasm)
@@ -186,11 +186,11 @@ jobs:
         run: npm run tauri:publish
 
       - name: Add CNAME file (Web)
-        if: matrix.platform == 'web' && github.repository == 'LiveSplit/LiveSplitOne' && github.ref == 'refs/heads/master'
+        if: matrix.platform == 'web' && github.repository == 'Gamebuster19901/LiveSplitOne' && github.ref == 'refs/heads/master'
         run: cp ./.github/workflows/CNAME ./${{ matrix.dist_path }}/CNAME
 
       - name: Deploy (Web)
-        if: matrix.platform == 'web' && github.repository == 'LiveSplit/LiveSplitOne' && github.ref == 'refs/heads/master'
+        if: matrix.platform == 'web' && github.repository == 'Gamebuster19901/LiveSplitOne' && github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v4
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
@@ -199,7 +199,7 @@ jobs:
           force_orphan: true
 
       - name: Prepare Release (Tauri)
-        if: matrix.platform == 'tauri' && github.repository == 'LiveSplit/LiveSplitOne' && github.ref == 'refs/heads/master'
+        if: matrix.platform == 'tauri' && github.repository == 'Gamebuster19901/LiveSplitOne' && github.ref == 'refs/heads/master'
         shell: bash
         run: .github/workflows/build_zip.sh
         env:
@@ -207,7 +207,7 @@ jobs:
           TARGET: ${{ matrix.binaryen }}
 
       - name: Release (Tauri)
-        if: matrix.platform == 'tauri' && github.repository == 'LiveSplit/LiveSplitOne' && github.ref == 'refs/heads/master'
+        if: matrix.platform == 'tauri' && github.repository == 'Gamebuster19901/LiveSplitOne' && github.ref == 'refs/heads/master'
         uses: softprops/action-gh-release@v2
         with:
           files: LiveSplitOne-*.*
