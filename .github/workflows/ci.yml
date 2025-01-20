@@ -223,6 +223,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: LiveSplitOne-*.*
-          name: Release ${{ steps.tag_generator.outputs.tag_name }}
-          tag_name: ${{ steps.tag_generator.outputs.tag_name }}
+          name: Latest
+          tag_name: latest
           body: The latest desktop version of LiveSplit One, which has support for global hotkeys.
