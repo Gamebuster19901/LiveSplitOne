@@ -4,9 +4,10 @@ import fs from "fs";
 let toolchain = "";
 let profile = "debug";
 let cargoFlags = "";
+// Keep .github/workflows/ci.yml in sync with these flags, so wasm-opt works.
 let rustFlags =
-    "-C target-feature=+bulk-memory,+mutable-globals,+nontrapping-fptoint,+sign-ext,+simd128,+extended-const,+multivalue";
-let wasmBindgenFlags = "";
+    "-C target-feature=+bulk-memory,+mutable-globals,+nontrapping-fptoint,+sign-ext,+simd128,+extended-const,+multivalue,+reference-types";
+let wasmBindgenFlags = "--encode-into always --target web --reference-types";
 let target = "wasm32-unknown-unknown";
 let targetFolder = target;
 
@@ -28,12 +29,8 @@ if (process.argv.some((v) => v === "--unstable")) {
     // Relaxed SIMD is not supported by Firefox and Safari yet.
     rustFlags += ",+relaxed-simd";
 
-    // Tail calls are not supported by Safari yet.
+    // Tail calls are not supported by Safari yet until 18.2 (early December).
     rustFlags += ",+tail-call";
-
-    // Reference types are broken in webpack (or rather its underlying webassemblyjs):
-    // https://github.com/LiveSplit/LiveSplitOne/issues/630
-    // wasmBindgenFlags += " --reference-types";
 }
 
 // Use the nightly toolchain, which enables some more optimizations.
@@ -81,6 +78,10 @@ execSync(
     }
 );
 
-fs.createReadStream("livesplit-core/capi/bindings/wasm_bindgen/index.ts").pipe(
-    fs.createWriteStream("src/livesplit-core/index.ts")
-);
+fs.createReadStream(
+    "livesplit-core/capi/bindings/wasm_bindgen/web/index.ts"
+).pipe(fs.createWriteStream("src/livesplit-core/index.ts"));
+
+fs.createReadStream(
+    "livesplit-core/capi/bindings/wasm_bindgen/web/preload.ts"
+).pipe(fs.createWriteStream("src/livesplit-core/preload.ts"));
