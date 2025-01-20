@@ -218,12 +218,6 @@ jobs:
           OS_NAME: ${{ matrix.os }}
           TARGET: ${{ matrix.binaryen }}
 
-      - name: Generate unique tag
-        run: |
-          chmod +x .github/scripts/generate_unique_tag.sh
-          .github/scripts/generate_unique_tag.sh
-        id: tag_generator
-
       - name: Release (Tauri)
         if: matrix.platform == 'tauri' && github.repository == 'Gamebuster19901/LiveSplitOne' && github.ref == 'refs/heads/master'
         uses: softprops/action-gh-release@v2
